@@ -1,0 +1,124 @@
+print(100*"_")
+print(38*' '+"WELCOME TO BLOOD BANK")
+print(50*' '+"MADE BY- Syed Akhtar")
+print(100*'_')
+
+def newDonor():
+    import mysql.connector
+    con=mysql.connector.connect(host="localhost",
+                                user="root",
+                                password="8765669688",
+                                database="blood_bank")
+    cur=con.cursor
+    id=input("Enter DonorId: ")
+    n=input("Enter your name: ")
+    db=input("Enter D.O.B: ")
+    adh=input("Enter aadhar no: ")
+    bg=input("Enter your blood group: ")
+    p=input("Enter phone no: ")
+    g=input("Enter your gmail: ")
+    ad=input("Enter your address: ")
+    d1=(id,n,db,adh,bg,p,g,ad)
+    d2=(id,n,bg,p,g,ad)
+    cur.execute('insert into donors(%s,%s,%s,%s,%s,%s,%s,%s)'%d1)
+    cur.execute('insert into donor_details(%s,%s,%s,%s,%s,%s)'%d2)
+    con.commit()
+    con.close()
+    print("Donor added successfully.")
+    main()
+
+def donationreq():
+    import mysql.connector
+    con=mysql.connector.connect(host="localhost",
+                                user="root",
+                                password="8765669688",
+                                database="blood_bank")
+    cur=con.cursor
+    print("Enter patient details.")
+    id=("Enter Id: ")
+    n=input("Enter name: ")
+    phn=input("Enter your phn no: ")
+    bg=input("Blood Group required: ")
+    age=input("Enter age: ")
+    hd=input("Enter hospital details: ")
+    d=(id,n,phn,bg,age,hd)
+    cur.execute('insert into anemic_patient(%s,%s,%s,%s,%s,%s)'%d)
+    con.commit()
+    con.close()
+    print("Patient registered successfully.")
+    main()
+
+def disDonors():
+    import mysql.connector
+    con=mysql.connector.connect(host="localhost",
+                                user="root",
+                                password="8765669688",
+                                database="blood_bank")
+    cur=con.cursor
+    b=input("Enter blood group: ")
+    cur.execute('select * from donors where blood_group=%s'%b)
+    con.commit()
+    con.close()
+    main()
+
+def deldonor():
+    import mysql.connector
+    con=mysql.connector.connect(host="localhost",
+                                user="root",
+                                password="8765669688",
+                                database="blood_bank")
+    cur=con.cursor
+    a=input("Enter DonorId to delete data: ")
+    cur.execute('DELETE FROM donors where DonorId=%s'%a)
+    cur.execute('DELETE FROM donor_details where DonorId=%s'%a)
+    con.commit()
+    con.close()
+    
+def delpatient():
+    import mysql.connector
+    con=mysql.connector.connect(host="localhost",
+                                user="root",
+                                password="8765669688",
+                                database="blood_bank")
+    cur=con.cursor
+    a=input("Enter Patient's Id to delete data: ")
+    cur.execute('DELETE FROM anemic_patient where PatientId=%s'%a)
+    con.commit()
+    con.close()
+    
+def delete():
+    print("Select what to delet:-")
+    print("1. Donor Details")
+    print("2. Patient Details")
+    choice=input("Enter Task No: ")
+    while True:
+        if(choice=='1'):
+            deldonor()
+        elif(choice=='2'):
+            delpatient()
+        else:
+            print("Wrong choice....")
+
+def main():
+    print(" Choose Your Option:- ")
+    print()
+    print("1. Register for blood donation")
+    print("2. Request for blood donation")
+    print("3. Delete Data")
+    print("4. View Donors")
+    print("5. Exit")
+    choice=input("Enter Task No: ")
+    while True:
+        if(choice=='1'):
+            newDonor()
+        elif(choice=='2'):
+            donationreq()
+        elif(choice=='3'):
+            delete()
+        elif(choice=='4'):
+            disDonors()
+        elif(choice=='5'):
+            break
+        else:
+            print("Wrong choice....")
+main()
